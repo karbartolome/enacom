@@ -13,7 +13,25 @@ color_discrete_map = {'Claro': '#f56140',
                       'Personal': '#5e9fff', 
                       'Movistar': '#74e667'}
 
-df_melt = pd.read_csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vROLB1I-zjpB7FOGXBfwEzlWRgVbtyylwiNEoN9JUhx-JRXmJVOsfimZ6mqYjiQFPbipP4oDWo0zIGz/pub?gid=4925713&single=true&output=csv')
+API_KEY='kcnt0wo0ckfEcJpf8FnRjszitdGa0ihfnSf9IeO0'
+INDICADOR = 'PORTA-NUMER-MOVIL-ALTAS-MENSU'
+DESCRIPCION = 'Portabilidad numérica móvil: altas mensuales por operador'
+url = 'http://api.datosabiertos.enacom.gob.ar/api/v2/datastreams/'+INDICADOR+'/data.csv/?auth_key='+API_KEY 
+df = pd.read_csv(url)
+
+for i in ['Personal','Movistar','Claro','Total general']:
+    df[i]=[int(j.replace(',','')) for j in df[i]]
+    
+df['mes']=df['Año'].astype(str)+'-'+df['Mes'].astype(str)
+df['mes']=pd.to_datetime(df['mes'])
+
+
+df_melt = pd.melt(df[['Año','mes', 'Personal','Claro','Movistar']], 
+                  id_vars=['Año','mes'], 
+                  value_vars=['Personal', 'Claro','Movistar'])
+
+df_melt=df_melt.rename({'variable':'empresa', 'value':'cantidad'}, axis=1)
+
 
 #App
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
