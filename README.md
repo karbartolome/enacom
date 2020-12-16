@@ -1,3 +1,3 @@
-# dash-gapminder
+# Dash Enacom
 
-Testing heroku para hostear dash --> https://gapminder-dash.herokuapp.com/
+Testing heroku para hostear dash --> https://telefonia-movil-dash.herokuapp.com/
